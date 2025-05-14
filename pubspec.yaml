@@ -57,6 +57,31 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - assets/image/
+
+    fonts:
+    - family: HKGrotesk
+      fonts:
+        - asset: assets/font/HKGrotesk-Regular.otf
+        - asset: assets/font/HKGrotesk-Bold.otf
+          weight: 700
+    - family: Gilroy
+      fonts:
+        - asset: assets/font/Gilroy-Regular.ttf
+        - asset: assets/font/Gilroy-Medium.ttf
+          weight: 500
+        - asset: assets/font/Gilroy-SemiBold.ttf
+          weight: 600
+        - asset: assets/font/Gilroy-Bold.ttf
+          weight: 700
+    - family: Airbnb Cereald
+      fonts:
+        - asset: assets/font/Airbnb-Cereald-Medium.otf
+    - family: Sveningsson
+      fonts:
+        - asset: assets/font/Sveningsson.ttf
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
