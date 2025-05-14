@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: TColor.primary,
       body:Center(
         child:
-        Image.asset("assets/image/splash_logo.png",width:media.width *0.7)
+        Image.asset("assets/hamrologo.png",width:media.width *0.7)
       ),
       
 
