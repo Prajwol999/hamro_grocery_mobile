@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hamro_grocery_mobile/auth/forgot_password.dart';
-import 'package:hamro_grocery_mobile/auth/signup_page.dart';
-
+import 'signup_page.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -104,7 +102,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2A4759),
+      backgroundColor: const Color(0xFF18230F),
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
@@ -112,31 +110,31 @@ class _SignInPageState extends State<SignInPage> {
             _passwordFocusNode.unfocus();
           },
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 25.0), // More balanced horizontal padding
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 30),
+                const SizedBox(height: 50), // Increased top spacing
                 Center(
                   child: Image.asset(
                     'assets/hamro2.png',
-                    height: 100,
+                    height: 80, // Slightly smaller and cleaner
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30), // Increased spacing
                 const Text(
-                  "Sign in",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+                  "Welcome Back!", // More inviting text
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white), // Slightly smaller font
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 const Text(
-                  "Please Sign in with your account",
-                  style: TextStyle(color: Colors.white70),
+                  "Sign in to continue shopping", // More descriptive subtitle
+                  style: TextStyle(color: Colors.white70, fontSize: 16), // Slightly larger subtitle
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 40), // Increased spacing before fields
 
                 // Email Field
-                TextField(
+                TextFormField(
                   controller: _emailController,
                   focusNode: _emailFocusNode,
                   keyboardType: TextInputType.emailAddress,
@@ -149,23 +147,27 @@ class _SignInPageState extends State<SignInPage> {
                     });
                   },
                   decoration: InputDecoration(
-                    labelText: "Email",
+                    labelText: "Email Address", // More specific label
                     labelStyle: const TextStyle(color: Colors.white70),
-                    prefixIcon: const Icon(Icons.email, color: Colors.white70),
+                    prefixIcon: const Icon(Icons.email_outlined, color: Colors.white70), // More modern icon
+                    errorText: _isEmailValid ? null : "Please enter a valid email", // Clearer error message
+                    errorStyle: const TextStyle(color: Colors.redAccent),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: _isEmailValid ? Colors.white30 : Colors.red),
+                      borderSide: BorderSide(color: _isEmailValid ? Colors.white30 : Colors.redAccent),
+                      borderRadius: BorderRadius.circular(12), // Rounded borders
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: _isEmailValid ? Colors.white : Colors.red),
+                      borderSide: BorderSide(color: _isEmailValid ? Colors.white : Colors.redAccent),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    border: const OutlineInputBorder(),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
 
                 const SizedBox(height: 20),
 
                 // Password Field
-                TextField(
+                TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   focusNode: _passwordFocusNode,
@@ -180,10 +182,10 @@ class _SignInPageState extends State<SignInPage> {
                   decoration: InputDecoration(
                     labelText: "Password",
                     labelStyle: const TextStyle(color: Colors.white70),
-                    prefixIcon: const Icon(Icons.lock, color: Colors.white70),
+                    prefixIcon: const Icon(Icons.lock_outline, color: Colors.white70), // More modern icon
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                        _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined, // More modern icons
                         color: Colors.white70,
                       ),
                       onPressed: () {
@@ -192,116 +194,135 @@ class _SignInPageState extends State<SignInPage> {
                         });
                       },
                     ),
+                    errorText: _isPasswordValid ? null : "Password must be at least 6 characters", // Clearer error
+                    errorStyle: const TextStyle(color: Colors.redAccent),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: _isPasswordValid ? Colors.white30 : Colors.red),
+                      borderSide: BorderSide(color: _isPasswordValid ? Colors.white30 : Colors.redAccent),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: _isPasswordValid ? Colors.white : Colors.red),
+                      borderSide: BorderSide(color: _isPasswordValid ? Colors.white : Colors.redAccent),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    border: const OutlineInputBorder(),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 15), // Slightly reduced spacing
 
                 Align(
                   alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () => Navigator.push(
+                  child: TextButton( // Using TextButton for better semantics
+                    onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const ForgotPassword()),
                     ),
                     child: const Text(
-                      "Forget Password?",
+                      "Forgot Password?",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 30), // Increased spacing before button
 
-                ElevatedButton(
-                  onPressed: _signIn,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF2A4759),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                SizedBox( // Using SizedBox to control width for better aesthetics
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _signIn,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFF2A4759),
+                      padding: const EdgeInsets.symmetric(vertical: 18), // Slightly increased padding
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), // Consistent rounding
+                      textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16), // Slightly larger text
+                    ),
+                    child: const Text("SIGN IN"),
                   ),
-                  child: const Text("SIGN IN", style: TextStyle(fontWeight: FontWeight.bold)),
-                ),
-
-                const SizedBox(height: 20),
-
-                const Center(child: Text("Or Sign in with", style: TextStyle(color: Colors.white60))),
-                const SizedBox(height: 10),
-
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.facebook),
-                  label: const Text("Sign In with Facebook"),
-                ),
-                const SizedBox(height: 10),
-
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    side: const BorderSide(color: Colors.white30),
-                    minimumSize: const Size.fromHeight(50),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                  icon: Image.asset(
-                    "assets/image.png",
-                    height: 24,
-                    width: 24,
-                    fit: BoxFit.contain,
-                  ),
-                  label: const Text("Sign In with Google"),
                 ),
 
                 const SizedBox(height: 30),
 
+                const Center(child: Text("Or sign in with", style: TextStyle(color: Colors.white60))),
+                const SizedBox(height: 15),
+
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Evenly space social buttons
                   children: [
-                    const Text("Don't have an account? ", style: TextStyle(color: Colors.white60)),
-                    GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SignUpPage()),
+                    Expanded( // Make buttons take equal width
+                      child: OutlinedButton.icon( // Using OutlinedButton for a cleaner look
+                        onPressed: () {},
+                        icon: const Icon(Icons.facebook, color: Colors.white), // White icon
+                        label: const Text("Facebook", style: TextStyle(color: Colors.white)),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.white30),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
                       ),
-                      child: const Text("Sign up Here", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                    )
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () {},
+                        icon: Image.asset(
+                          "assets/google.png",
+                          height: 20,
+                          width: 20,
+                        ),
+                        label: const Text("Google", style: TextStyle(color: Colors.white)),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.white30),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
 
                 const SizedBox(height: 40),
 
-                // Instagram and Facebook logos
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      onTap: () => _launchURL('https://www.instagram.com'),
-                      child: Image.asset(
+                    const Text("Don't have an account? ", style: TextStyle(color: Colors.white60)),
+                    TextButton( // Using TextButton for better semantics
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignUpPage()),
+                      ),
+                      child: const Text("Sign up here", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                    )
+                  ],
+                ),
+
+                const SizedBox(height: 30),
+
+                // Instagram and Facebook logos (moved to the bottom with different styling)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () => _launchURL('https://www.instagram.com'),
+                      icon: Image.asset(
                         'assets/insta_logo.png',
-                        height: 40,
-                        width: 40,
+                        height: 30,
+                        width: 30,
                       ),
                     ),
-                    const SizedBox(width: 20),
-                    GestureDetector(
-                      onTap: () => _launchURL('https://www.facebook.com'),
-                      child: Image.asset(
+                    const SizedBox(width: 30),
+                    IconButton(
+                      onPressed: () => _launchURL('https://www.facebook.com'),
+                      icon: Image.asset(
                         'assets/fb_logo.png',
-                        height: 40,
-                        width: 40,
+                        height: 30,
+                        width: 30,
                       ),
                     ),
                   ],
                 ),
+                const SizedBox(height: 20), // Add some bottom padding
               ],
             ),
           ),

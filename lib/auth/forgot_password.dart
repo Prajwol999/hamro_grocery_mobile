@@ -11,9 +11,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _emailSent = false;
-  bool _isEmailValid = true; // To track email validity
 
-  // Email validation using regex
   bool _isValidEmail(String email) {
     return RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(email);
   }
@@ -24,32 +22,46 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
       setState(() {
         _emailSent = true;
-        _isEmailValid = true; // Reset email validity on success
+        _emailController.clear(); // Clear email field
       });
 
-      _showSnackBar("Password reset link sent to $email", Colors.green);
+      _showCenterMessage("Reset link sent to $email");
 
-      // Show the "Check your inbox" message for 3 seconds
       Future.delayed(const Duration(seconds: 3), () {
-        setState(() {
-          _emailSent = false;
-        });
-      });
-    } else {
-      setState(() {
-        _isEmailValid = false; // Set email as invalid when validation fails
+        setState(() => _emailSent = false);
+        Navigator.of(context).pop(); // Navigate back to previous screen
       });
     }
   }
 
-  void _showSnackBar(String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: color,
-        behavior: SnackBarBehavior.floating,
+  void _showCenterMessage(String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.check_circle, color: Colors.green, size: 48),
+            const SizedBox(height: 12),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
       ),
     );
+
+    // Auto-dismiss after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+    });
   }
 
   @override
@@ -61,80 +73,108 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2A4759),
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2A4759),
-        title: const Text("Reset Password", style: TextStyle(color: Colors.white)),
-        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.white,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Form(
-          key: _formKey,
+      body: Center(
+        child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Forgot your password?",
-                style: TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+              // Decorative header image
+              SizedBox(
+                width: double.infinity,
+                child: Image.asset(
+                  'assets/fruits.jpg', // Replace with your actual image asset
+                  fit: BoxFit.cover,
+                  height: 200,
+                ),
               ),
-              const SizedBox(height: 10),
-              const Text(
-                "Enter your registered email address. We'll send you a link to reset your password.",
-                style: TextStyle(color: Colors.white70),
-              ),
-              const SizedBox(height: 30),
-              TextFormField(
-                controller: _emailController,
-                style: const TextStyle(color: Colors.white),
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: "Email",
-                  labelStyle: const TextStyle(color: Colors.white70),
-                  prefixIcon: const Icon(Icons.email, color: Colors.white70),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: _isEmailValid ? Colors.white30 : Colors.red),
+              Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: _isEmailValid ? Colors.white : Colors.red),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          // Optional logo
+                          Image.asset(
+                            'assets/hamro2.png', // Replace with your logo asset
+                            height: 60,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            "Forgot Password",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            "Please enter your registered email address",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black54),
+                          ),
+                          const SizedBox(height: 30),
+                          TextFormField(
+                            controller: _emailController,
+                            decoration: const InputDecoration(
+                              labelText: 'Email',
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your email';
+                              } else if (!_isValidEmail(value)) {
+                                return 'Enter a valid email address';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 30),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _resetPassword,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: const Text(
+                                'Reset Password',
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          if (_emailSent) ...[
+                            const SizedBox(height: 20),
+                            const Text(
+                              "Check your inbox for the reset link.",
+                              style: TextStyle(color: Colors.green),
+                            ),
+                          ]
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  if (!_isValidEmail(value)) {
-                    return 'Please enter a valid email address';
-                  }
-                  return null;
-                },
               ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: _resetPassword,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF2A4759),
-                  minimumSize: const Size.fromHeight(50),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                child: const Text("SEND RESET LINK", style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              const SizedBox(height: 20),
-              if (_emailSent)
-                Center(
-                  child: const Text(
-                    "Check your inbox for the reset link.",
-                    style: TextStyle(color:Colors.white,)
-                  ),
-                ),
             ],
           ),
         ),
