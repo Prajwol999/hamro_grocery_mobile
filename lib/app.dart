@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Hamro Grocery',
+      title: 'hamro grocery',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: "Gilroy",

@@ -1,56 +1,43 @@
 import 'package:flutter/material.dart';
-import '../common/color_extension.dart'; // Update with actual path
+import '../common/color_extension.dart'; 
+import "package:hamro_grocery_mobile/splash/welcome_view.dart";
 
-class SplashScreen extends StatelessWidget {
-   const SplashScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+
+  @override
+  void initState() {
+    // TODO:implement initstate
+    
+    super.initState();
+  }
+  void fireOpenApp() async{
+
+    await Future.delayed(const Duration(seconds:3));
+
+  }
+  void startApp(){
+    Navigator.push(context, MaterialPageRoute(builder:(context)=> const WelcomeView()));
+
+  }
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.sizeOf(context);
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Background image
-          Image.asset(
-            'assets/images/welcom_bg.png',
-            fit: BoxFit.cover,
-          ),
-          // Foreground content
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // App logo
-              Image.asset(
-                'assets/images/hamro.png',
-                width: 150,
-              ),
-              const SizedBox(height: 20),
-              // Text message
-              Text(
-                'Avoid the Line and\nShop from Home',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: TColor.primaryText,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(1, 1),
-                      blurRadius: 2,
-                      color: Colors.black26,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40),
-              // Illustration
-              Image.asset(
-                'assets/images/queuepager.png',
-                width: 250,
-              ),
-            ],
-          ),
-        ],
-      ),
+      backgroundColor: TColor.primary,
+      body:Stack(
+        alignment: Alignment.center,
+        children:[
+        Image.asset("android/assets/image/splash_logo.png",width:media.width *0.7,fit:BoxFit.cover)
+      ])
+      
+
     );
   }
 }
