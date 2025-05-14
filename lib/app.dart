@@ -3,10 +3,6 @@ import 'common/color_extension.dart';
 import 'package:hamro_grocery_mobile/splash/splash_screen.dart';
 
 
-
-
-
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

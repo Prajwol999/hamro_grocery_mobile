@@ -14,7 +14,7 @@ class _WelcomeViewState extends State<WelcomeView> {
     return Scaffold(
       backgroundColor:Colors.white ,
       body:Stack(children:[
-        Image.asset("android/assets/image/welcom_bg.png",width:media.width,height:media.height,fit:BoxFit.cover)
+        Image.asset("assets/image/welcom_bg.png",width:media.width,height:media.height,fit:BoxFit.cover)
       ])
     );
   }
