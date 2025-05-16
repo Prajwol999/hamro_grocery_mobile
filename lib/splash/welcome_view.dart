@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hamro_grocery_mobile/auth/signin_page.dart';
+import 'package:hamro_grocery_mobile/view/auth/signin_page.dart';
 
 class WelcomeView extends StatefulWidget {
   const WelcomeView({super.key});

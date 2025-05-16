@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hamro_grocery_mobile/auth/forgot_password.dart';
+import 'package:hamro_grocery_mobile/view/auth/dashboard_view.dart';
+import 'package:hamro_grocery_mobile/view/auth/forgot_password.dart';
 import 'signup_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,43 +22,49 @@ class _SignInPageState extends State<SignInPage> {
   bool _obscurePassword = true;
 
   void _signIn() {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
+  final email = _emailController.text.trim();
+  final password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
-      _showSnackBar("Please fill in all fields", Colors.red);
-      return;
-    }
+  if (email.isEmpty || password.isEmpty) {
+    _showSnackBar("Please fill in all fields", Colors.red);
+    return;
+  }
 
-    if (!_isValidEmail(email)) {
-      setState(() {
-        _isEmailValid = false;
-      });
-      _showSnackBar("Please enter a valid email address", Colors.red);
-      return;
-    }
-
-    if (password.length < 6) {
-      setState(() {
-        _isPasswordValid = false;
-      });
-      _showSnackBar("Password should be at least 6 characters", Colors.red);
-      return;
-    }
-
+  if (!_isValidEmail(email)) {
     setState(() {
-      _isEmailValid = true;
-      _isPasswordValid = true;
+      _isEmailValid = false;
     });
+    _showSnackBar("Please enter a valid email address", Colors.red);
+    return;
+  }
 
-    _showSnackBar("Sign-in successful!", Colors.lightGreenAccent);
+  if (password.length < 8) {
+    setState(() {
+      _isPasswordValid = false;
+    });
+    _showSnackBar("Password should be at least 8 characters", Colors.red);
+    return;
+  }
+
+  if (email == "admin@gmail.com" && password == "admin123") {
+    _showSnackBar("Sign in successful", Colors.lightBlueAccent);
 
     _emailController.clear();
     _passwordController.clear();
 
     _emailFocusNode.unfocus();
     _passwordFocusNode.unfocus();
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const DashboardView()),
+    );
+  } else {
+    _showSnackBar("Invalid email or password", Colors.red);
   }
+}
+
+  
 
   bool _isValidEmail(String email) {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -102,7 +109,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF18230F),
+      backgroundColor: const Color.fromARGB(255, 51, 67, 39),
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
