@@ -18,7 +18,7 @@ class _DashboardViewState extends State<DashboardView> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 186, 110, 110),
+            color: Color.fromARGB(255, 77, 60, 60),
           ),
         ),
       ),
