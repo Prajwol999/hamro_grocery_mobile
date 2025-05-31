@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hamro_grocery_mobile/view/auth/dashboard_view.dart';
+import 'package:hamro_grocery_mobile/view/auth/dashboard/grocery_app_home.dart';
+
+
 import 'package:hamro_grocery_mobile/view/auth/forgot_password.dart';
 import 'signup_page.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -52,7 +54,7 @@ class _SignInPageState extends State<SignInPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const DashboardView()),
+        MaterialPageRoute(builder: (context) => const GroceryAppHome()),
       );
     } else {
       _showSnackBar("Invalid email or password", Colors.red);
