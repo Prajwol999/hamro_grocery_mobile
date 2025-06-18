@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/register_view_model/register_event.dart';
+import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/register_view_model/register_state.dart';
+import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/register_view_model/register_view_model.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -60,20 +64,15 @@ class _SignUpPageState extends State<SignUpPage> {
       return;
     }
 
-    setState(() {
-      _isEmailValid = true;
-      _isPasswordValid = true;
-      _isPhoneValid = true;
-    });
-
-    _showSnackBar("Sign-up successful!", Colors.green);
-
-    _nameController.clear();
-    _emailController.clear();
-    _phoneController.clear();
-    _passwordController.clear();
-    _confirmPasswordController.clear();
-    FocusScope.of(context).unfocus();
+    context.read<RegisterViewModel>().add(
+          RegisterUserEvent(
+            context: context,
+            name: name,
+            email: email,
+            password: password,
+            phone: fullPhoneNumber,
+          ),
+        );
   }
 
   bool _isValidEmail(String email) {
@@ -109,47 +108,69 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final paddingH = size.width * 0.06;
-    final spacing = size.height * 0.025;
-    final imageHeight = size.height * 0.08;
+    return BlocListener<RegisterViewModel, RegisterState>(
+      listener: (context, state) {
+        if (state.isSuccess) {
+          _nameController.clear();
+          _emailController.clear();
+          _phoneController.clear();
+          _passwordController.clear();
+          _confirmPasswordController.clear();
+          FocusScope.of(context).unfocus();
+        }
+      },
+      child: BlocBuilder<RegisterViewModel, RegisterState>(
+        builder: (context, state) {
+          final size = MediaQuery.of(context).size;
+          final paddingH = size.width * 0.06;
+          final spacing = size.height * 0.025;
+          final imageHeight = size.height * 0.08;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: paddingH),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: spacing),
-                        _buildTopBar(imageHeight),
-                        SizedBox(height: spacing),
-                        _buildTitle(size),
-                        SizedBox(height: spacing * 1.2),
-                        _buildFormFields(spacing, size),
-                        SizedBox(height: spacing),
-                        _buildSignUpButton(size),
-                        SizedBox(height: spacing * 1.2),
-                        _buildSocialOptions(size),
-                        const Spacer(),
-                        _buildBottomPrompt(),
-                        SizedBox(height: spacing * 0.8),
-                      ],
-                    ),
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Stack(
+              children: [
+                SafeArea(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return GestureDetector(
+                        onTap: () => FocusScope.of(context).unfocus(),
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.symmetric(horizontal: paddingH),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                            child: IntrinsicHeight(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: spacing),
+                                  _buildTopBar(imageHeight),
+                                  SizedBox(height: spacing),
+                                  _buildTitle(size),
+                                  SizedBox(height: spacing * 1.2),
+                                  _buildFormFields(spacing, size),
+                                  SizedBox(height: spacing),
+                                  _buildSignUpButton(size),
+                                  SizedBox(height: spacing * 1.2),
+                                  _buildSocialOptions(size),
+                                  const Spacer(),
+                                  _buildBottomPrompt(),
+                                  SizedBox(height: spacing * 0.8),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+                if (state.isLoading)
+                  const Center(child: CircularProgressIndicator()),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

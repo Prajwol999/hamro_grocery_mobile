@@ -4,6 +4,8 @@ import 'package:hamro_grocery_mobile/feature/auth/data/data_source/local_datasou
 import 'package:hamro_grocery_mobile/feature/auth/data/repository/local_repository/auth_local_repository.dart';
 import 'package:hamro_grocery_mobile/feature/auth/domain/usecase/login_usecase.dart';
 import 'package:hamro_grocery_mobile/feature/auth/domain/usecase/register_usecase.dart';
+import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/login_view_model/login_view_model.dart';
+import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/register_view_model/register_view_model.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -49,18 +51,17 @@ Future<void> _initAuthModule() async {
 
   // ===================== ViewModels ====================
 
-  // serviceLocator.registerFactory<RegisterViewModel>(
-  //   () => RegisterViewModel(serviceLocator<UserRegisterUseCase>()),
-  // );
+  serviceLocator.registerFactory<RegisterViewModel>(
+    () => RegisterViewModel(serviceLocator<UserRegisterUseCase>()),
+  );
 
   // Register LoginViewModel WITHOUT HomeViewModel to avoid circular dependency
-//   serviceLocator.registerFactory(
-//     () => LoginViewModel(serviceLocator<UserLoginUseCase>()),
-//   );
-// }
+  serviceLocator.registerFactory(
+    () => LoginViewModel(serviceLocator<UserLoginUseCase>()),
+  );
+}
 
 // Future<void> _initHomeModule() async {
 //   serviceLocator.registerFactory(
 //     () => HomeViewModel(loginViewModel: serviceLocator<LoginViewModel>()),
 //   );
-}

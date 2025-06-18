@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hamro_grocery_mobile/app/service_locator/service_locator.dart';
 import 'package:hamro_grocery_mobile/common/app_flush.dart';
 import 'package:hamro_grocery_mobile/feature/auth/domain/usecase/login_usecase.dart';
+
+import 'package:hamro_grocery_mobile/feature/auth/presentation/view/signup_page.dart';
+import 'package:hamro_grocery_mobile/view/auth/dashboard/grocery_app_home.dart';
 import 'package:hamro_grocery_mobile/view/auth/dashboard/home_screen.dart';
-import 'package:hamro_grocery_mobile/view/auth/signup_page.dart';
+
 import '../register_view_model/register_view_model.dart';
 import 'login_event.dart';
 import 'login_state.dart';
@@ -42,7 +45,7 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
   ) async {
     Navigator.pushAndRemoveUntil(
       event.context,
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
+      MaterialPageRoute(builder: (_) => const GroceryAppHome()),
       (route) => false,
     );
     await AppFlushbar.show(
