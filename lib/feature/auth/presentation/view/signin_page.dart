@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,7 +6,6 @@ import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/login_
 import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/login_view_model/login_state.dart';
 import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:hamro_grocery_mobile/view/auth/forgot_password.dart';
-
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -43,12 +41,12 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     context.read<LoginViewModel>().add(
-      LoginWithEmailAndPassword(
-        email: email,
-        password: password,
-        context: context,
-      ),
-    );
+          LoginWithEmailAndPassword(
+            email: email,
+            password: password,
+            context: context,
+          ),
+        );
   }
 
   void _showSnackBar(String message, Color backgroundColor) {
@@ -73,7 +71,7 @@ class _SignInPageState extends State<SignInPage> {
           child: BlocConsumer<LoginViewModel, LoginState>(
             listener: (context, state) {
               if (!state.isSuccess && !state.isLoading) {
-                _showSnackBar("Login failed", Colors.red);
+                _showSnackBar("Login failed", Colors.yellow);
               }
             },
             builder: (context, state) {
@@ -115,7 +113,9 @@ class _SignInPageState extends State<SignInPage> {
                         prefixIcon: const Icon(Icons.lock),
                         border: const OutlineInputBorder(),
                         suffixIcon: IconButton(
-                          icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                          icon: Icon(
+                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          ),
                           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                         ),
                       ),
@@ -134,14 +134,31 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    /// Sign In Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: state.isLoading ? null : () => _login(context),
-                        child: state.isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text("SIGN IN"),
+                    
+                    Align(
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8, // Bigger width
+                        height: 50, // Bigger height
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: state.isLoading ? null : () => _login(context),
+                          child: state.isLoading
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : const Text(
+                                  "SIGN IN",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -158,9 +175,9 @@ class _SignInPageState extends State<SignInPage> {
                                 );
                           },
                           child: const Text("Sign up here"),
-                        )
+                        ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               );
