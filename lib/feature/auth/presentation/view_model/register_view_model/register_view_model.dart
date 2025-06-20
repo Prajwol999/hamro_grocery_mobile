@@ -74,7 +74,7 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
             context: event.context,
             message: "Signup successful!",
             icon: const Icon(Icons.check_circle, color: Colors.white),
-            backgroundColor: Colors.cyan,
+            backgroundColor: Colors.yellow,
           );
         }
       },
