@@ -7,36 +7,19 @@ import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/login_
 import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:hamro_grocery_mobile/view/auth/forgot_password.dart';
 
-class SignInPage extends StatefulWidget {
+class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
 
-  @override
-  State<SignInPage> createState() => _SignInPageState();
-}
-
-class _SignInPageState extends State<SignInPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final FocusNode _emailFocusNode = FocusNode();
-  final FocusNode _passwordFocusNode = FocusNode();
-
-  bool _obscurePassword = true;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _emailFocusNode.dispose();
-    _passwordFocusNode.dispose();
-    super.dispose();
-  }
-
-  void _login(BuildContext context) {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
+  void _login({
+    required BuildContext context,
+    required TextEditingController emailController,
+    required TextEditingController passwordController,
+  }) {
+    final email = emailController.text.trim();
+    final password = passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
-      _showSnackBar("Please fill in all fields", Colors.red);
+      _showSnackBar(context, "Please fill in all fields", Colors.red);
       return;
     }
 
@@ -49,7 +32,7 @@ class _SignInPageState extends State<SignInPage> {
         );
   }
 
-  void _showSnackBar(String message, Color backgroundColor) {
+  void _showSnackBar(BuildContext context, String message, Color backgroundColor) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: backgroundColor,
@@ -63,6 +46,9 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+
     return BlocProvider<LoginViewModel>(
       create: (_) => serviceLocator<LoginViewModel>(),
       child: Scaffold(
@@ -71,10 +57,12 @@ class _SignInPageState extends State<SignInPage> {
           child: BlocConsumer<LoginViewModel, LoginState>(
             listener: (context, state) {
               if (!state.isSuccess && !state.isLoading) {
-                _showSnackBar("Login failed", Colors.yellow);
+                _showSnackBar(context, "Login failed", Colors.yellow);
               }
             },
             builder: (context, state) {
+              bool obscurePassword = true;
+
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ListView(
@@ -92,9 +80,8 @@ class _SignInPageState extends State<SignInPage> {
                     const Text("Sign in to continue shopping"),
                     const SizedBox(height: 30),
 
-                    /// Email Field
                     TextFormField(
-                      controller: _emailController,
+                      controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         labelText: "Email",
@@ -104,21 +91,28 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    /// Password Field
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        labelText: "Password",
-                        prefixIcon: const Icon(Icons.lock),
-                        border: const OutlineInputBorder(),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                    StatefulBuilder(
+                      builder: (context, setState) {
+                        return TextFormField(
+                          controller: passwordController,
+                          obscureText: obscurePassword,
+                          decoration: InputDecoration(
+                            labelText: "Password",
+                            prefixIcon: const Icon(Icons.lock),
+                            border: const OutlineInputBorder(),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                obscurePassword ? Icons.visibility_off : Icons.visibility,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  obscurePassword = !obscurePassword;
+                                });
+                              },
+                            ),
                           ),
-                          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                        ),
-                      ),
+                        );
+                      },
                     ),
                     const SizedBox(height: 10),
 
@@ -134,12 +128,11 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    
                     Align(
                       alignment: Alignment.center,
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.8, // Bigger width
-                        height: 50, // Bigger height
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: 50,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
@@ -147,7 +140,13 @@ class _SignInPageState extends State<SignInPage> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          onPressed: state.isLoading ? null : () => _login(context),
+                          onPressed: state.isLoading
+                              ? null
+                              : () => _login(
+                                    context: context,
+                                    emailController: emailController,
+                                    passwordController: passwordController,
+                                  ),
                           child: state.isLoading
                               ? const CircularProgressIndicator(color: Colors.white)
                               : const Text(
@@ -163,7 +162,6 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    /// Sign Up Prompt
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
