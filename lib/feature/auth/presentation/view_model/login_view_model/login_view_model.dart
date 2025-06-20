@@ -51,7 +51,7 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
     await AppFlushbar.show(
       context: event.context,
       message: "Login successful!",
-      backgroundColor: Colors.green,
+      backgroundColor: Colors.yellow,
       icon: const Icon(Icons.check_circle, color: Colors.white),
     );
   }
