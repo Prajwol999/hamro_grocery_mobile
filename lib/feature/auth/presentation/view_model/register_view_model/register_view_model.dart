@@ -27,18 +27,18 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
     await Future.delayed(const Duration(seconds: 1));
 
     // Print submitted data
-    print('📝 Submitted Data:');
-    print('name: ${event.name}');
+    print(' Submitted Data:');
+    print('fullName: ${event.fullName}');
     print('Email: ${event.email}');
     print('Password: ${event.password}');
-    print('phone: ${event.phone}');
+    
 
     final result = await _userRegisterUseCase(
       RegisterUserParams(
         email: event.email,
-        name: event.name,
+        fullName: event.fullName,
         password: event.password,
-        phone: event.phone,
+       
       ),
     );
 

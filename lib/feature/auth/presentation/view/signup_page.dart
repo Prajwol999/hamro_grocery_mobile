@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/register_view_model/register_event.dart';
 import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/register_view_model/register_state.dart';
 import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/register_view_model/register_view_model.dart';
@@ -15,12 +14,10 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
   String fullPhoneNumber = "";
-  bool _isPhoneValid = true;
   bool _isPasswordValid = true;
   bool _isEmailValid = true;
   bool _obscurePassword = true;
@@ -32,12 +29,12 @@ class _SignUpPageState extends State<SignUpPage> {
   final FocusNode _nameFocusNode = FocusNode();
 
   void _signUp() {
-    final name = _nameController.text.trim();
+    final fullName = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    if (name.isEmpty || email.isEmpty || fullPhoneNumber.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+    if (fullName.isEmpty || email.isEmpty  || password.isEmpty || confirmPassword.isEmpty) {
       _showSnackBar("Please fill in all fields", Colors.red);
       return;
     }
@@ -59,18 +56,15 @@ class _SignUpPageState extends State<SignUpPage> {
       return;
     }
 
-    if (!_isPhoneValid) {
-      _showSnackBar("Please enter a valid phone number", Colors.red);
-      return;
-    }
+   
 
     context.read<RegisterViewModel>().add(
           RegisterUserEvent(
             context: context,
-            name: name,
+            fullName: fullName,
             email: email,
             password: password,
-            phone: fullPhoneNumber,
+
           ),
         );
   }
@@ -96,7 +90,6 @@ class _SignUpPageState extends State<SignUpPage> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
-    _phoneController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     _emailFocusNode.dispose();
@@ -113,7 +106,6 @@ class _SignUpPageState extends State<SignUpPage> {
         if (state.isSuccess) {
           _nameController.clear();
           _emailController.clear();
-          _phoneController.clear();
           _passwordController.clear();
           _confirmPasswordController.clear();
           FocusScope.of(context).unfocus();
@@ -224,16 +216,16 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         SizedBox(height: spacing),
 
-        IntlPhoneField(
-          controller: _phoneController,
-          initialCountryCode: 'NP',
-          onChanged: (phone) {
-            fullPhoneNumber = phone.completeNumber;
-            setState(() => _isPhoneValid = phone.number.length >= 10);
-          },
-          decoration: _inputDecoration("Phone Number", Icons.phone_outlined),
-        ),
-        SizedBox(height: spacing),
+        // IntlPhoneField(
+        //   controller: _phoneController,
+        //   initialCountryCode: 'NP',
+        //   onChanged: (phone) {
+        //     fullPhoneNumber = phone.completeNumber;
+        //     setState(() => _isPhoneValid = phone.number.length >= 10);
+        //   },
+        //   decoration: _inputDecoration("Phone Number", Icons.phone_outlined),
+        // ),
+        // SizedBox(height: spacing),
 
         TextFormField(
           controller: _passwordController,

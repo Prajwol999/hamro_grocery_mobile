@@ -67,12 +67,12 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
 
     result.fold(
       (failure) {
-        // Handle failure case
+        
         emit(state.copyWith(isLoading: false, isSuccess: false));
 
       },
       (email) {
-        // Handle success case
+        
         emit(state.copyWith(isLoading: false, isSuccess: true));
         add(NavigateToHomeView(context: event.context));
       },
