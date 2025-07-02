@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hamro_grocery_mobile/view/auth/dashboard/home_screen.dart';
+import 'package:hamro_grocery_mobile/feature/auth/presentation/view/signin_page.dart';
 
 class GroceryAppHome extends StatefulWidget {
   const GroceryAppHome({super.key});
@@ -13,16 +14,38 @@ class _GroceryAppHomeState extends State<GroceryAppHome> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const Center(child: Text('Your data for this screen will appear here', style: TextStyle(fontSize: 18, color: Colors.grey))),
-    const Center(child: Text('Your data for this screen will appear here', style: TextStyle(fontSize: 18, color: Colors.grey))),
-    const Center(child: Text('Your data for this screen will appear here', style: TextStyle(fontSize: 18, color: Colors.grey))),
-    const Center(child: Text('Your data for this screen will appear here', style: TextStyle(fontSize: 18, color: Colors.grey))),
+    const Center(
+      child: Text(
+        'Your cart is empty',
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+      ),
+    ),
+    const Center(
+      child: Text(
+        'No order history yet',
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+      ),
+    ),
+    const Center(
+      child: Text(
+        'Profile details will appear here',
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+      ),
+    ),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void _logout() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const SignInPage()),
+      (route) => false,
+    );
   }
 
   @override
@@ -43,9 +66,21 @@ class _GroceryAppHomeState extends State<GroceryAppHome> {
         title: Image.asset('assets/hamro2.png', height: 40),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart, color: Colors.grey),
-            onPressed: () {},
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert, color: Colors.grey),
+            onSelected: (value) {
+              if (value == 'logout') {
+                _logout();
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem<String>(
+                  value: 'logout',
+                  child: Text('Logout'),
+                ),
+              ];
+            },
           ),
           const SizedBox(width: 10),
         ],
@@ -66,11 +101,26 @@ class _GroceryAppHomeState extends State<GroceryAppHome> {
         ),
         child: BottomNavigationBar(
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Shops'),
-            BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'My List'),
-            BottomNavigationBarItem(icon: Icon(Icons.history), label: 'My History'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart_outlined),
+              activeIcon: Icon(Icons.shopping_cart),
+              label: 'Cart',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.history_toggle_off),
+              activeIcon: Icon(Icons.history),
+              label: 'History',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: 'Profile',
+            ),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.green,

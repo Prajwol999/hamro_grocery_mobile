@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hamro_grocery_mobile/view/auth/signin_page.dart';
+import 'package:hamro_grocery_mobile/feature/auth/presentation/view/signin_page.dart';
 
-class WelcomeView extends StatefulWidget {
+class WelcomeView extends StatelessWidget {
   const WelcomeView({super.key});
 
-  @override
-  State<WelcomeView> createState() => _WelcomeViewState();
-}
-
-class _WelcomeViewState extends State<WelcomeView> {
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
@@ -22,15 +17,12 @@ class _WelcomeViewState extends State<WelcomeView> {
 
             return Stack(
               children: [
-                // Background Image
                 Positioned.fill(
                   child: Image.asset(
                     "assets/welcom_bg.png",
                     fit: BoxFit.cover,
                   ),
                 ),
-
-                // Get Started Button
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
