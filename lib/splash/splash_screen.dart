@@ -23,8 +23,10 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 2),
     );
 
-    _fadeAnimation =
-        CurvedAnimation(parent: _animationController, curve: Curves.easeIn);
+    _fadeAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeIn,
+    );
 
     _animationController.forward();
   }
@@ -50,68 +52,78 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.sizeOf(context);
+    final media = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          // Background Image
-          Positioned.fill(
-            child: Image.asset(
-              "assets/bg.jpg", // Make sure this image exists in your assets
-              fit: BoxFit.cover,
-            ),
-          ),
-
-          // Dark overlay for readability
-          Container(
-            color: Colors.black.withOpacity(0.5),
-          ),
-
-          // Main content
-          Center(
-            child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Logo (No shadow)
-                  SizedBox(
-                    width: media.width * 0.5,
-                    height: media.width * 0.5,
-                    child: Image.asset(
-                      "assets/hamro2.png",
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Tagline
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40),
-                    child: Text(
-                      "Your online grocery app\nwhere you can find everything you need.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 30),
-
-                  // Loader
-                  const CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 3,
-                  ),
-                ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Background Image
+            Positioned.fill(
+              child: Image.asset(
+                "assets/bg.jpg",
+                fit: BoxFit.cover,
               ),
             ),
-          ),
-        ],
+
+            // Semi-transparent overlay
+            Container(
+              color: Colors.black.withOpacity(0.5),
+            ),
+
+            // Main Content
+            Center(
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: media.width * 0.08),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Logo
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: media.width * 0.5,
+                            maxHeight: media.width * 0.5,
+                          ),
+                          child: Image.asset(
+                            "assets/hamro2.png",
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+
+                        SizedBox(height: media.height * 0.04),
+
+                        // Tagline
+                        Text(
+                          "Your online grocery app\nwhere you can find everything you need.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: media.width * 0.045,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            height: 1.4,
+                          ),
+                        ),
+
+                        SizedBox(height: media.height * 0.05),
+
+                        // Loading Indicator
+                        const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 3,
+                        ),
+
+                        SizedBox(height: media.height * 0.05),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
