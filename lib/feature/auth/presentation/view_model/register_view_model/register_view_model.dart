@@ -27,18 +27,18 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
     await Future.delayed(const Duration(seconds: 1));
 
     // Print submitted data
-    print('📝 Submitted Data:');
-    print('name: ${event.name}');
+    print(' Submitted Data:');
+    print('fullName: ${event.fullName}');
     print('Email: ${event.email}');
     print('Password: ${event.password}');
-    print('phone: ${event.phone}');
+    
 
     final result = await _userRegisterUseCase(
       RegisterUserParams(
         email: event.email,
-        name: event.name,
+        fullName: event.fullName,
         password: event.password,
-        phone: event.phone,
+       
       ),
     );
 
@@ -49,9 +49,9 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
         if (event.context.mounted) {
           await AppFlushbar.show(
             context: event.context,
-            message: "Something went wrong!",
+            message: "Something went wrong",
 
-            icon: const Icon(Icons.error, color: Colors.white),
+            icon: const Icon(Icons.check_circle, color: Colors.white),
             backgroundColor: Colors.green,
           );
         }
@@ -74,7 +74,7 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
             context: event.context,
             message: "Signup successful!",
             icon: const Icon(Icons.check_circle, color: Colors.white),
-            backgroundColor: Colors.yellow,
+            backgroundColor: Colors.green,
           );
         }
       },

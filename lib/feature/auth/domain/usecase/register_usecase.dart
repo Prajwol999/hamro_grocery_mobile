@@ -7,27 +7,26 @@ import 'package:hamro_grocery_mobile/feature/auth/domain/repository/auth_reposit
 
 
 class RegisterUserParams extends Equatable {
-  final String name;
-  final String phone;
+  final String fullName;
   final String password;
   final String email;
 
   const RegisterUserParams({
-    required this.name,
+    required this.fullName,
     required this.password,
     required this.email,
-    required this.phone,
+  
   });
 
   const RegisterUserParams.initial({
-    required this.name,
+    required this.fullName,
     required this.password,
     required this.email,
-    required this.phone,
+  
   });
 
   @override
-  List<Object?> get props => [name, phone, password, email];
+  List<Object?> get props => [fullName, password, email];
 }
 
 class UserRegisterUseCase
@@ -40,10 +39,9 @@ class UserRegisterUseCase
   @override
   Future<Either<Failure, void>> call(RegisterUserParams params) {
     final authEntity = AuthEntity(
-      name: params.name,
+      fullName: params.fullName,
       email: params.email,
       password: params.password,
-      phone: params.phone,
     );
 
     return _authRepository.registerUser(authEntity);
