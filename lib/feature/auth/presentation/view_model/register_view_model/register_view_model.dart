@@ -49,9 +49,9 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
         if (event.context.mounted) {
           await AppFlushbar.show(
             context: event.context,
-            message: "Something went wrong!",
+            message: "Something went wrong",
 
-            icon: const Icon(Icons.error, color: Colors.white),
+            icon: const Icon(Icons.check_circle, color: Colors.white),
             backgroundColor: Colors.green,
           );
         }
@@ -74,7 +74,7 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
             context: event.context,
             message: "Signup successful!",
             icon: const Icon(Icons.check_circle, color: Colors.white),
-            backgroundColor: Colors.yellow,
+            backgroundColor: Colors.green,
           );
         }
       },
