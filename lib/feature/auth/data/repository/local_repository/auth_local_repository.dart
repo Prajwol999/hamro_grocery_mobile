@@ -32,4 +32,40 @@ class AuthLocalRepository implements IAuthRepository {
       return Left(LocalDataBaseFailure(message: "failed to register : $e"));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> changePassword(
+    String oldPassword,
+    String newPassword,
+  ) {
+    // TODO: implement changePassword
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, AuthEntity>> getUserProfile(String? token) {
+    // TODO: implement getUserProfile
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> logoutUser() {
+    // TODO: implement logoutUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> resetPassword(String email) {
+    // TODO: implement resetPassword
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUserProfile(
+    AuthEntity user,
+    String? token,
+  ) {
+    // TODO: implement updateUserProfile
+    throw UnimplementedError();
+  }
 }
