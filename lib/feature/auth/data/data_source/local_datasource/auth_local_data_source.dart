@@ -32,4 +32,34 @@ class UserLocalDataSource implements IAuthDataSource {
       throw Exception("Registration Failed : $e");
     }
   }
+
+  @override
+  Future<void> changePassword(String oldPassword, String newPassword) {
+    // TODO: implement changePassword
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthEntity> getUserProfile(String? token) async {
+    // TODO: implement getUserProfile
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> logoutUser() {
+    // TODO: implement logoutUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> resetPassword(String email) {
+    // TODO: implement resetPassword
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateUserProfile(AuthEntity entity, String? token) async {
+    // TODO: implement updateUserProfile
+    throw UnimplementedError();
+  }
 }

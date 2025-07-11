@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_view.dart';
+import 'package:hamro_grocery_mobile/dashboard/home_screen.dart';
 
 class GroceryAppHome extends StatefulWidget {
   const GroceryAppHome({super.key});
@@ -13,10 +13,30 @@ class _GroceryAppHomeState extends State<GroceryAppHome> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const Center(child: Text('Your data for this screen will appear here', style: TextStyle(fontSize: 18, color: Colors.grey))),
-    const Center(child: Text('Your data for this screen will appear here', style: TextStyle(fontSize: 18, color: Colors.grey))),
-    const Center(child: Text('Your data for this screen will appear here', style: TextStyle(fontSize: 18, color: Colors.grey))),
-    const Center(child: Text('Your data for this screen will appear here', style: TextStyle(fontSize: 18, color: Colors.grey))),
+    const Center(
+      child: Text(
+        'Your data for this screen will appear here',
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+      ),
+    ),
+    const Center(
+      child: Text(
+        'Your data for this screen will appear here',
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+      ),
+    ),
+    const Center(
+      child: Text(
+        'Your data for this screen will appear here',
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+      ),
+    ),
+    const Center(
+      child: Text(
+        'Your data for this screen will appear here',
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+      ),
+    ),
   ];
 
   void _onItemTapped(int index) {
@@ -68,8 +88,14 @@ class _GroceryAppHomeState extends State<GroceryAppHome> {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Shops'),
-            BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'My List'),
-            BottomNavigationBarItem(icon: Icon(Icons.history), label: 'My History'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list_alt),
+              label: 'My List',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.history),
+              label: 'My History',
+            ),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           ],
           currentIndex: _selectedIndex,
