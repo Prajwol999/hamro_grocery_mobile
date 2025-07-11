@@ -15,8 +15,14 @@ import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/profil
 import 'package:hamro_grocery_mobile/feature/auth/presentation/view_model/register_view_model/register_view_model.dart';
 import 'package:hamro_grocery_mobile/feature/category/data/data_source/remote_data_source/category_remote_data_source.dart';
 import 'package:hamro_grocery_mobile/feature/category/data/repository/remote_repository/category_remote_repository.dart';
+import 'package:hamro_grocery_mobile/feature/category/domain/repository/category_repository.dart';
 import 'package:hamro_grocery_mobile/feature/category/domain/usecase/get_all_category_usecase.dart';
 import 'package:hamro_grocery_mobile/feature/category/presentation/view_model/category_view_model.dart';
+import 'package:hamro_grocery_mobile/feature/product/data/data_source/remote_data_source/product_remote_data_source.dart';
+import 'package:hamro_grocery_mobile/feature/product/data/repository/remote_repository/product_remote_repository.dart';
+import 'package:hamro_grocery_mobile/feature/product/domain/repository/product_repository.dart';
+import 'package:hamro_grocery_mobile/feature/product/domain/usecase/get_all_product_usecase.dart';
+import 'package:hamro_grocery_mobile/feature/product/presentation/view_model/product_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final serviceLocator = GetIt.instance;
@@ -27,6 +33,7 @@ Future initDependencies() async {
   await _initApiService();
   await _initSharedPrefs();
   await _initCategoryModule();
+  await _initProductModule() ;
 
   // await _initSplashModule();
   // await _initHomeModule();
@@ -146,7 +153,7 @@ Future<void> _initCategoryModule() async {
   // ===================== Use Cases ====================
   serviceLocator.registerFactory(
     () => GetAllCategoryUsecase(
-      categoryRepository: serviceLocator<CategoryRemoteRepository>(),
+      categoryRepository: serviceLocator<ICategoryRepository>(),
     ),
   );
 
@@ -154,6 +161,34 @@ Future<void> _initCategoryModule() async {
   serviceLocator.registerFactory(
     () => CategoryViewModel(
       getAllCategoryUsecase: serviceLocator<GetAllCategoryUsecase>(),
+    ),
+  );
+}
+
+Future<void> _initProductModule() async {
+  // ===================== Data Source ====================
+  serviceLocator.registerFactory(
+        () => ProductRemoteDataSource(apiService: serviceLocator<ApiService>()),
+  );
+
+  // ===================== Repository ====================
+  serviceLocator.registerFactory(
+        () => ProductRemoteRepository(
+      productRemoteDataSource: serviceLocator<ProductRemoteDataSource>(),
+    ),
+  );
+
+  // ===================== Use Cases ====================
+  serviceLocator.registerFactory(
+        () => GetAllProductUsecase(
+      productRepository: serviceLocator<IProductRepository>(),
+    ),
+  );
+
+  // ===================== ViewModels ====================
+  serviceLocator.registerFactory(
+        () => ProductViewModel(
+      getAllProductUsecase: serviceLocator<GetAllProductUsecase>(),
     ),
   );
 }

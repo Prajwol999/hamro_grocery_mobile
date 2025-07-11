@@ -8,7 +8,7 @@ class GetAllProductUsecase
     implements UseCaseWithoutParams<List<ProductEntity>> {
   final IProductRepository _productRepository;
 
-  GetAllProductUsecase(this._productRepository);
+  GetAllProductUsecase({required IProductRepository productRepository}) : _productRepository = productRepository;
 
   @override
   Future<Either<Failure, List<ProductEntity>>> call() async {
