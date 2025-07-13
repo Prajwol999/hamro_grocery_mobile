@@ -1,3 +1,5 @@
+// lib/feature/product/presentation/view_model/product_view_model.dart
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hamro_grocery_mobile/feature/product/domain/usecase/get_all_product_usecase.dart';
 import 'package:hamro_grocery_mobile/feature/product/presentation/view_model/product_event.dart';
@@ -6,21 +8,27 @@ import 'package:hamro_grocery_mobile/feature/product/presentation/view_model/pro
 class ProductViewModel extends Bloc<ProductEvent, ProductState> {
   final GetAllProductUsecase getAllProductUsecase;
   ProductViewModel({required this.getAllProductUsecase})
-    : super(const ProductState.initial()) {
+    // Use the new factory constructor for a cleaner initial state
+    : super(ProductState.initial()) {
     on<LoadProductsEvent>(_onLoadProducts);
-    add(LoadProductsEvent());
+    // REMOVED: add(LoadProductsEvent());
+    // The UI should be responsible for adding this event.
   }
 
   Future<void> _onLoadProducts(
     LoadProductsEvent event,
     Emitter<ProductState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true));
+    // When loading, you should also clear any previous error.
+    // The `copyWith` in the original code had a bug, but with the corrected
+    // state, this now works as intended.
+    emit(state.copyWith(isLoading: true, errorMessage: null));
 
     final result = await getAllProductUsecase();
 
     result.fold(
       (failure) {
+        // Here you correctly use failure.message, which is a String.
         emit(state.copyWith(isLoading: false, errorMessage: failure.message));
       },
       (products) {
