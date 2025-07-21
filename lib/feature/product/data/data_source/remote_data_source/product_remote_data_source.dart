@@ -14,17 +14,20 @@ class ProductRemoteDataSource implements IProductDataSource {
   @override
   Future<List<ProductEntity>> getAllProducts() async {
     try {
-      // Assuming the API endpoint for products is defined in ApiEndpoints
       final response = await _apiService.dio.get(ApiEndpoints.getAllProducts);
+
       if (response.statusCode == 200) {
-        GetAllProductDto getAllProductDto = GetAllProductDto.fromJson(
-          response.data,
-        );
-        return ProductApiModel.toEntityList(getAllProductDto.data);
+        final List<dynamic> productJsonList = response.data as List<dynamic>;
+        final List<ProductApiModel> productModels = productJsonList
+            .map((json) => ProductApiModel.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return ProductApiModel.toEntityList(productModels);
+
       } else {
-        throw Exception('Failed to load products');
+        throw Exception('Failed to load products with status code: ${response.statusCode}');
       }
     } catch (e) {
+      // It's good practice to re-throw with more context, as you've done.
       throw Exception('Failed to fetch products: $e');
     }
   }

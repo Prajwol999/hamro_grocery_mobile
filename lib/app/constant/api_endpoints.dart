@@ -4,7 +4,7 @@ class ApiEndpoints {
   static const connectionTimeout = Duration(seconds: 1000);
   static const receiveTimeout = Duration(seconds: 1000);
 
-  static const String serverAddress = "http://192.168.1.2:8081";
+  static const String serverAddress = "http://192.168.1.15:8081";
 
   static const String baseUrl = "$serverAddress/api/";
 
@@ -22,4 +22,8 @@ class ApiEndpoints {
   static const String updateUserProfile = "auth/profile/picture";
   static const String forgotPassword = "auth/forgot-password";
   static const String resetPassword = "auth/reset-password/:token";
+
+  static const String orders = "orders";
+  static const String myOrders = "orders/myorders";
+  static const String paymentHistory = "orders/payment-history";
 }

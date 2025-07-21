@@ -19,16 +19,11 @@ class ProductViewModel extends Bloc<ProductEvent, ProductState> {
     LoadProductsEvent event,
     Emitter<ProductState> emit,
   ) async {
-    // When loading, you should also clear any previous error.
-    // The `copyWith` in the original code had a bug, but with the corrected
-    // state, this now works as intended.
     emit(state.copyWith(isLoading: true, errorMessage: null));
-
     final result = await getAllProductUsecase();
 
     result.fold(
       (failure) {
-        // Here you correctly use failure.message, which is a String.
         emit(state.copyWith(isLoading: false, errorMessage: failure.message));
       },
       (products) {

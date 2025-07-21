@@ -40,11 +40,14 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
 
   Future<void> _pickImage(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+    final XFile? image = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
     if (image != null) {
-      context
-          .read<ProfileViewModel>()
-          .add(ProfileImagePickedEvent(imageFile: File(image.path)));
+      context.read<ProfileViewModel>().add(
+        ProfileImagePickedEvent(imageFile: File(image.path)),
+      );
     }
   }
 
@@ -69,9 +72,10 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
                         password: state.authEntity!.password,
                         location: _locationController.text,
                       );
-                      context.read<ProfileViewModel>().add(UpdateProfileEvent(
-                          authEntity: updatedEntity )) ;
-                          // newProfileImage: state.newProfileImageFile));
+                      context.read<ProfileViewModel>().add(
+                        UpdateProfileEvent(authEntity: updatedEntity),
+                      );
+                      // newProfileImage: state.newProfileImageFile));
                     }
                   } else {
                     context.read<ProfileViewModel>().add(ToggleEditModeEvent());
@@ -90,9 +94,9 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
             _locationController.text = state.authEntity!.location ?? '';
           }
           if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage!)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
             context.read<ProfileViewModel>().add(ClearMessageEvent());
           }
         },
@@ -103,7 +107,10 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
           if (state.authEntity == null) {
             return Center(
               child: ElevatedButton(
-                onPressed: () => context.read<ProfileViewModel>().add(LoadProfileEvent()),
+                onPressed:
+                    () => context.read<ProfileViewModel>().add(
+                      LoadProfileEvent(),
+                    ),
                 child: const Text('Retry'),
               ),
             );
@@ -126,26 +133,37 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
                         controller: _fullNameController,
                         enabled: state.isEditing,
                         decoration: _inputDecoration('Full Name', Icons.person),
-                        validator: (v) => v!.isEmpty ? 'Full name is required' : null,
+                        validator:
+                            (v) => v!.isEmpty ? 'Full name is required' : null,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _emailController,
                         enabled: false,
-                        decoration: _inputDecoration('Email Address', Icons.email),
+                        decoration: _inputDecoration(
+                          'Email Address',
+                          Icons.email,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _locationController,
                         enabled: state.isEditing,
-                        decoration: _inputDecoration('Location', Icons.location_on),
+                        decoration: _inputDecoration(
+                          'Location',
+                          Icons.location_on,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
                         key: Key(state.authEntity!.grocerypoints.toString()),
-                        initialValue: state.authEntity!.grocerypoints?.toString() ?? '0',
+                        initialValue:
+                            state.authEntity!.grocerypoints?.toString() ?? '0',
                         enabled: false,
-                        decoration: _inputDecoration('Grocery Points', Icons.star),
+                        decoration: _inputDecoration(
+                          'Grocery Points',
+                          Icons.star,
+                        ),
                       ),
                       const SizedBox(height: 20),
                     ],
@@ -179,9 +197,10 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
         CircleAvatar(
           radius: 60,
           backgroundImage: backgroundImage,
-          child: backgroundImage == null
-              ? const Icon(Icons.person, size: 60, color: Colors.grey)
-              : null,
+          child:
+              backgroundImage == null
+                  ? const Icon(Icons.person, size: 60, color: Colors.grey)
+                  : null,
         ),
         if (state.isEditing)
           Positioned(
@@ -205,11 +224,11 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
       labelText: label,
       prefixIcon: Icon(icon),
       border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12))
+        borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       enabledBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          borderSide: BorderSide(color: Colors.grey)
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderSide: BorderSide(color: Colors.grey),
       ),
       filled: true,
       fillColor: Colors.black.withOpacity(0.05),

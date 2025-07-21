@@ -1,9 +1,28 @@
 import 'package:flutter/material.dart';
-import 'category_card.dart';
-import 'product_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hamro_grocery_mobile/feature/category/presentation/view_model/category_state.dart';
+import 'package:hamro_grocery_mobile/feature/category/presentation/view_model/category_view_model.dart';
+import 'package:hamro_grocery_mobile/feature/product/presentation/view/product_card.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'package:hamro_grocery_mobile/feature/product/presentation/view_model/product_event.dart';
+import 'package:hamro_grocery_mobile/feature/product/presentation/view_model/product_state.dart';
+import 'package:hamro_grocery_mobile/feature/product/presentation/view_model/product_view_model.dart';
+import 'package:hamro_grocery_mobile/view/auth/dashboard/category_card.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Dispatch the event to load products when the screen is first built.
+    context.read<ProductViewModel>().add(LoadProductsEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,42 +31,99 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Search bar
+          // Search bar (remains static)
           _buildSearchBar(),
 
-          // Shop By Category
+          // Shop By Category (remains static for now)
           _buildSectionHeader('Shop By Category', onTap: () {}),
-          SizedBox(
-            height: 130,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: const [
-                CategoryCard(title: 'Fruits & Vegetables', imageUrl: 'assets/fresh_fruits.png'),
-                CategoryCard(title: 'Meat & Seafood', imageUrl: 'assets/beef_bone.png'),
-                CategoryCard(title: 'Dairy & Eggs', imageUrl: 'assets/dairy_eggs.png'),
-                CategoryCard(title: 'Bakery & sweets', imageUrl: 'assets/bakery_snacks.png'),
-                CategoryCard(title: 'Beverages', imageUrl: 'assets/beverages.png'),
-              ],
-            ),
+          BlocBuilder<CategoryViewModel, CategoryState>(
+            builder: (context, state) {
+              if (state.isLoading) {
+                return const SizedBox(
+                  height: 130,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (state.errorMessage != null) {
+                return SizedBox(
+                  height: 130,
+                  child: Center(child: Text(state.errorMessage!)),
+                );
+              }
+
+              return SizedBox(
+                height: 130,
+                // Use ListView.builder for a dynamic list
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.categories.length,
+                  itemBuilder: (context, index) {
+                    final category = state.categories[index];
+                    // Use our helper to get the correct image asset
+
+                    return CategoryCard(category: category);
+                  },
+                ),
+              );
+            },
           ),
 
           const SizedBox(height: 24.0),
 
-          // Latest Added
+          // Latest Added (This section is now DYNAMIC)
           _buildSectionHeader('Latest added', onTap: () {}),
-          SizedBox(
-            height: 340,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: const [
-                ProductCard(name: 'Godawari Rice', price: '1300', unit: '20kg', imageUrl: 'assets/rice.png'),
-                ProductCard(name: 'Cooking oil', price: '250', unit: '0.5L', imageUrl: 'assets/cooking_oil.png'),
-                ProductCard(name: 'Orange juice', price: '50', unit: '0.25L', imageUrl: 'assets/orange_juice.png'),
-                ProductCard(name: 'Eggs', price: '120', unit: '6 pc', imageUrl: 'assets/dairy_eggs.png'),
-                ProductCard(name: 'Sprite can', price: '260', unit: '2.25 ltr', imageUrl: 'assets/sprite_can.png'),
-                ProductCard(name: 'Mayonnaise', price: '456', unit: '2 pc', imageUrl: 'assets/mayonnaise.png'),
-              ],
-            ),
+
+          BlocBuilder<ProductViewModel, ProductState>(
+            builder: (context, state) {
+              if (state.isLoading && state.products.isEmpty) {
+                return const SizedBox(
+                  height: 340,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              if (state.errorMessage != null) {
+                return SizedBox(
+                  height: 340,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(state.errorMessage!),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed:
+                              () => context.read<ProductViewModel>().add(
+                            LoadProductsEvent(),
+                          ),
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              if (state.products.isEmpty) {
+                return const SizedBox(
+                  height: 340,
+                  child: Center(
+                    child: Text('No products available right now.'),
+                  ),
+                );
+              }
+              return SizedBox(
+                height: 340,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.products.length,
+                  itemBuilder: (context, index) {
+                    final product = state.products[index];
+                    return ProductCard(product: product);
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -68,7 +144,10 @@ class HomeScreen extends StatelessWidget {
           hintStyle: TextStyle(color: Colors.grey),
           prefixIcon: Icon(Icons.search, color: Colors.grey),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 10.0),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 16.0,
+            horizontal: 10.0,
+          ),
         ),
         style: TextStyle(color: Colors.black87),
       ),
@@ -81,13 +160,23 @@ class HomeScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
           TextButton(
             onPressed: onTap,
             child: const Text(
               'View all',
-              style: TextStyle(color: Colors.green, fontSize: 14, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: Colors.green,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],

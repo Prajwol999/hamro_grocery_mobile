@@ -13,8 +13,8 @@ class CategoryRemoteRepository implements ICategoryRepository {
   @override
   Future<Either<Failure, List<CategoryEntity>>> getAllCategories() async {
     try {
-      final categories = _categoryRemoteDataSource.getAllCategories();
-      return Right(categories as List<CategoryEntity>);
+      final List<CategoryEntity> categories = await _categoryRemoteDataSource.getAllCategories();
+      return Right(categories) ;
     } catch (e) {
       return Left(
         ApiFailure(message: 'Failed to fetch categories: $e', statusCode: 500),
