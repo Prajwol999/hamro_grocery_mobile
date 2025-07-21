@@ -8,19 +8,14 @@ import 'package:hamro_grocery_mobile/view/auth/dashboard/shop_list_screen.dart';
 import 'bottom_navigation_state.dart';
 
 class BottomNavigationCubit extends Cubit<BottomNavigationState> {
-
   final List<Widget> _screens = [
     const HomeScreen(),
     const ShopListScreen(),
-    const OrderScreen(),    // The screen for 'My List'
-    const HistoryScreen(),  // The screen for 'My History'
-    const ProfileScreen(),
   ];
 
   final List<String> _appBarTitles = [
     'Hamro Grocery',
     'Shops',
-    'My Orders', // Updated title to match the screen
     'My History',
     'Profile',
   ];
@@ -29,7 +24,6 @@ class BottomNavigationCubit extends Cubit<BottomNavigationState> {
       : super(
     BottomNavigationState(
       currentIndex: 0,
-      currentScreen: const HomeScreen(), // Initial screen is HomeScreen
       appBarTitle: 'Hamro Grocery',
     ),
   );

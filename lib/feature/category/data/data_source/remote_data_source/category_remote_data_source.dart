@@ -16,23 +16,11 @@ class CategoryRemoteDataSource implements ICategoryDataSource {
     try {
       final response = await _apiService.dio.get(ApiEndpoints.getAllCategories);
       if (response.statusCode == 200) {
-        final List<dynamic> categoryListJson = response.data;
-
-        final List<CategoryApiModel> apiModels = categoryListJson
-            .map((json) => CategoryApiModel.fromJson(json as Map<String, dynamic>))
-            .toList();
-
-        // 3. Convert the list of API models to a list of entities.
-        return CategoryApiModel.toEntityList(apiModels);
-
       } else {
-        throw Exception('Failed to load categories: Status code ${response.statusCode}');
       }
     } on DioException catch (e) {
       throw Exception('Failed to fetch categories: ${e.message}');
     } catch (e) {
-      // Catching parsing errors specifically
-      throw Exception('Failed to parse categories: $e');
     }
   }
 }
