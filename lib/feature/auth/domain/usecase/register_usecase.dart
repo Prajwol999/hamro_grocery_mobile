@@ -5,7 +5,6 @@ import 'package:hamro_grocery_mobile/core/error/failure.dart';
 import 'package:hamro_grocery_mobile/feature/auth/domain/entity/auth_entity.dart';
 import 'package:hamro_grocery_mobile/feature/auth/domain/repository/auth_repository.dart';
 
-
 class RegisterUserParams extends Equatable {
   final String fullName;
   final String password;
@@ -15,14 +14,12 @@ class RegisterUserParams extends Equatable {
     required this.fullName,
     required this.password,
     required this.email,
-  
   });
 
   const RegisterUserParams.initial({
     required this.fullName,
     required this.password,
     required this.email,
-  
   });
 
   @override

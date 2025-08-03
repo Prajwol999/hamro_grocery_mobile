@@ -1,96 +1,264 @@
 import 'package:flutter/material.dart';
-import 'category_card.dart';
-import 'product_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:hamro_grocery_mobile/app/service_locator/service_locator.dart';
+import 'package:hamro_grocery_mobile/feature/bot/presentation/view/bot_view.dart';
+import 'package:hamro_grocery_mobile/feature/bot/presentation/view_model/bot_view_model.dart';
+import 'package:hamro_grocery_mobile/feature/category/presentation/view/category_card.dart';
+import 'package:hamro_grocery_mobile/feature/category/presentation/view_model/category_event.dart';
+import 'package:hamro_grocery_mobile/feature/category/presentation/view_model/category_state.dart';
+import 'package:hamro_grocery_mobile/feature/category/presentation/view_model/category_view_model.dart';
+import 'package:hamro_grocery_mobile/feature/notification/presentation/view/notification_screen.dart';
+import 'package:hamro_grocery_mobile/feature/notification/presentation/view_model/notification_event.dart';
+import 'package:hamro_grocery_mobile/feature/notification/presentation/view_model/notification_state.dart';
+import 'package:hamro_grocery_mobile/feature/notification/presentation/view_model/notification_view_model.dart';
+import 'package:hamro_grocery_mobile/feature/product/presentation/view/product_card.dart';
+import 'package:hamro_grocery_mobile/feature/product/presentation/view_model/product_event.dart';
+import 'package:hamro_grocery_mobile/feature/product/presentation/view_model/product_state.dart';
+import 'package:hamro_grocery_mobile/feature/product/presentation/view_model/product_view_model.dart';
+import 'package:hamro_grocery_mobile/view/auth/dashboard/welcome_banner.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final VoidCallback openDrawer;
+  const HomeScreen({Key? key, required this.openDrawer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Search bar
-          _buildSearchBar(),
-
-          // Shop By Category
-          _buildSectionHeader('Shop By Category', onTap: () {}),
-          SizedBox(
-            height: 130,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: const [
-                CategoryCard(title: 'Fruits & Vegetables', imageUrl: 'assets/fresh_fruits.png'),
-                CategoryCard(title: 'Meat & Seafood', imageUrl: 'assets/beef_bone.png'),
-                CategoryCard(title: 'Dairy & Eggs', imageUrl: 'assets/dairy_eggs.png'),
-                CategoryCard(title: 'Bakery & sweets', imageUrl: 'assets/bakery_snacks.png'),
-                CategoryCard(title: 'Beverages', imageUrl: 'assets/beverages.png'),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 24.0),
-
-          // Latest Added
-          _buildSectionHeader('Latest added', onTap: () {}),
-          SizedBox(
-            height: 340,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: const [
-                ProductCard(name: 'Godawari Rice', price: '1300', unit: '20kg', imageUrl: 'assets/rice.png'),
-                ProductCard(name: 'Cooking oil', price: '250', unit: '0.5L', imageUrl: 'assets/cooking_oil.png'),
-                ProductCard(name: 'Orange juice', price: '50', unit: '0.25L', imageUrl: 'assets/orange_juice.png'),
-                ProductCard(name: 'Eggs', price: '120', unit: '6 pc', imageUrl: 'assets/dairy_eggs.png'),
-                ProductCard(name: 'Sprite can', price: '260', unit: '2.25 ltr', imageUrl: 'assets/sprite_can.png'),
-                ProductCard(name: 'Mayonnaise', price: '456', unit: '2 pc', imageUrl: 'assets/mayonnaise.png'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSearchBar() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 24.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: const TextField(
-        decoration: InputDecoration(
-          hintText: 'Search for groceries...',
-          hintStyle: TextStyle(color: Colors.grey),
-          prefixIcon: Icon(Icons.search, color: Colors.grey),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 10.0),
+    // Use MultiBlocProvider to provide all necessary Blocs for this screen.
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create:
+              (context) =>
+                  serviceLocator<NotificationViewModel>()
+                    ..add(GetNotificationsEvent()),
         ),
-        style: TextStyle(color: Colors.black87),
+        BlocProvider(
+          create:
+              (context) =>
+                  serviceLocator<CategoryViewModel>()
+                    ..add(LoadCategoriesEvent()),
+        ),
+        BlocProvider(
+          create:
+              (context) =>
+                  serviceLocator<ProductViewModel>()
+                    // Load all products initially when the screen loads.
+                    ..add(const LoadProductsEvent()),
+        ),
+      ],
+      child: Scaffold(
+        appBar: _buildAppBar(context),
+        // The body should be a single widget. The SingleChildScrollView contains all content.
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const WelcomeBanner(),
+              _buildCategorySection(),
+              _buildProductSection(),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildSectionHeader(String title, {required VoidCallback onTap}) {
+  // Extracted AppBar to a separate method for cleanliness
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      centerTitle: false,
+      automaticallyImplyLeading: false,
+      leading: IconButton(
+        onPressed: openDrawer,
+        icon: const Icon(Icons.menu, color: Colors.black),
+      ),
+      title: const Text(
+        "Hamro Grocery",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      actions: [
+        // IconButton for the Bot
+        IconButton(
+          tooltip: 'Ask GrocerBot',
+          icon: const Icon(Icons.support_agent_outlined, color: Colors.black),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (_) => BlocProvider(
+                      create: (context) => serviceLocator<ChatBloc>(),
+                      child: const BotView(),
+                    ),
+              ),
+            );
+          },
+        ),
+        // Notification icon with badge
+        BlocBuilder<NotificationViewModel, NotificationState>(
+          builder: (context, state) {
+            return badges.Badge(
+              position: badges.BadgePosition.topEnd(top: 0, end: 3),
+              badgeContent: Text(
+                state.unreadCount.toString(),
+                style: const TextStyle(color: Colors.white, fontSize: 10),
+              ),
+              showBadge: state.unreadCount > 0,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const NotificationScreen(),
+                    ),
+                  ).then((_) {
+                    // When returning, refresh the notification count
+                    context.read<NotificationViewModel>().add(
+                      GetNotificationsEvent(),
+                    );
+                  });
+                },
+              ),
+            );
+          },
+        ),
+        const SizedBox(width: 8),
+      ],
+    );
+  }
+
+  Widget _buildCategorySection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionHeader('Shop By Category'),
+        BlocBuilder<CategoryViewModel, CategoryState>(
+          builder: (context, state) {
+            if (state.isLoading) {
+              return const SizedBox(
+                height: 50,
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            if (state.errorMessage != null) {
+              return SizedBox(
+                height: 50,
+                child: Center(child: Text(state.errorMessage!)),
+              );
+            }
+            return SizedBox(
+              height: 50,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                itemCount: state.categories.length + 1, // +1 for "All"
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: CategoryCard(
+                        name: 'All',
+                        isSelected: state.selectedCategoryId == null,
+                        onTap: () {
+                          context.read<CategoryViewModel>().add(
+                            const SelectCategoryEvent(null),
+                          );
+                          context.read<ProductViewModel>().add(
+                            const LoadProductsEvent(),
+                          );
+                        },
+                      ),
+                    );
+                  }
+
+                  final category = state.categories[index - 1];
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: CategoryCard(
+                      name: category.name,
+                      isSelected:
+                          state.selectedCategoryId == category.categoryId,
+                      onTap: () {
+                        context.read<CategoryViewModel>().add(
+                          SelectCategoryEvent(category.categoryId),
+                        );
+                        context.read<ProductViewModel>().add(
+                          LoadProductsEvent(categoryName: category.name),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProductSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionHeader('Latest Products'),
+        BlocBuilder<ProductViewModel, ProductState>(
+          builder: (context, state) {
+            if (state.isLoading && state.products.isEmpty) {
+              return const SizedBox(
+                height: 260,
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            if (state.errorMessage != null && state.products.isEmpty) {
+              return SizedBox(
+                height: 260,
+                child: Center(child: Text(state.errorMessage!)),
+              );
+            }
+            if (state.products.isEmpty && !state.isLoading) {
+              return const SizedBox(
+                height: 260,
+                child: Center(child: Text('No products found.')),
+              );
+            }
+            return SizedBox(
+              height: 260,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                itemCount: state.products.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: ProductCard(product: state.products[index]),
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
-          TextButton(
-            onPressed: onTap,
-            child: const Text(
-              'View all',
-              style: TextStyle(color: Colors.green, fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          ),
-        ],
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+      child: Text(
+        title,
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
     );
   }
