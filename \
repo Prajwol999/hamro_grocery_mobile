@@ -1,0 +1,77 @@
+feat : CRUD profile
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Author:    Prajwol999 <prajwalneupane385@gmail.com>
+# Date:      Fri Jul 11 16:56:31 2025 +0545
+#
+# interactive rebase in progress; onto e6fb87c
+# Last command done (1 command done):
+#    edit 206ffd9 feat : CRUD profile
+# Next commands to do (4 remaining commands):
+#    edit c792e0f test : category usecase
+#    edit 287fd6e test : usecase product passed
+# You are currently editing a commit while rebasing branch 'sprint_5' on 'e6fb87c'.
+#
+# Changes to be committed:
+#	modified:   lib/app/constant/api_endpoints.dart
+#	modified:   lib/app/service_locator/service_locator.dart
+#	renamed:    lib/common_widget/custom_textfield.dart -> lib/common/custom_textfield.dart
+#	renamed:    lib/common_widget/round_button.dart -> lib/common/round_button.dart
+#	modified:   lib/dashboard/category_card.dart
+#	modified:   lib/dashboard/grocery_app_home.dart
+#	modified:   lib/feature/auth/data/data_source/auth_data_source.dart
+#	modified:   lib/feature/auth/data/data_source/local_datasource/auth_local_data_source.dart
+#	modified:   lib/feature/auth/data/data_source/remote_datasource/auth_remote_data_source.dart
+#	new file:   lib/feature/auth/data/dto/get_all_user_dto.dart
+#	new file:   lib/feature/auth/data/dto/get_all_user_dto.g.dart
+#	modified:   lib/feature/auth/data/model/user_api_model.dart
+#	modified:   lib/feature/auth/data/model/user_api_model.g.dart
+#	modified:   lib/feature/auth/data/repository/local_repository/auth_local_repository.dart
+#	modified:   lib/feature/auth/data/repository/remote_repository/auth_remote_repository.dart
+#	modified:   lib/feature/auth/domain/entity/auth_entity.dart
+#	modified:   lib/feature/auth/domain/repository/auth_repository.dart
+#	new file:   lib/feature/auth/domain/usecase/get_user_usecase.dart
+#	modified:   lib/feature/auth/domain/usecase/login_usecase.dart
+#	new file:   lib/feature/auth/domain/usecase/update_user_usecase.dart
+#	new file:   lib/feature/auth/presentation/view/profile_detail_screen.dart
+#	new file:   lib/feature/auth/presentation/view/profile_menu.dart
+#	new file:   lib/feature/auth/presentation/view/profile_screen.dart
+#	modified:   lib/feature/auth/presentation/view_model/login_view_model/login_view_model.dart
+#	new file:   lib/feature/auth/presentation/view_model/profile_view_model/profile_event.dart
+#	new file:   lib/feature/auth/presentation/view_model/profile_view_model/profile_state.dart
+#	new file:   lib/feature/auth/presentation/view_model/profile_view_model/profile_view_model.dart
+#	new file:   lib/feature/category/data/data_source/category_data_source.dart
+#	new file:   lib/feature/category/data/data_source/remote_data_source/category_remote_data_source.dart
+#	new file:   lib/feature/category/data/dto/get_all_category_dto.dart
+#	new file:   lib/feature/category/data/dto/get_all_category_dto.g.dart
+#	new file:   lib/feature/category/data/model/category_api_model.dart
+#	new file:   lib/feature/category/data/model/category_api_model.g.dart
+#	new file:   lib/feature/category/data/repository/remote_repository/category_remote_repository.dart
+#	new file:   lib/feature/category/domain/entity/category_entity.dart
+#	new file:   lib/feature/category/domain/repository/category_repository.dart
+#	new file:   lib/feature/category/domain/usecase/get_all_category_usecase.dart
+#	new file:   lib/feature/category/presentation/view_model/category_event.dart
+#	new file:   lib/feature/category/presentation/view_model/category_state.dart
+#	new file:   lib/feature/category/presentation/view_model/category_view_model.dart
+#	new file:   lib/feature/product/data/data_source/product_data_source.dart
+#	new file:   lib/feature/product/data/data_source/remote_data_source/product_remote_data_source.dart
+#	new file:   lib/feature/product/data/dto/get_all_product_dto.dart
+#	new file:   lib/feature/product/data/dto/get_all_product_dto.g.dart
+#	new file:   lib/feature/product/data/model/product_api_model.dart
+#	new file:   lib/feature/product/data/model/product_api_model.g.dart
+#	new file:   lib/feature/product/data/repository/remote_repository/product_remote_repository.dart
+#	new file:   lib/feature/product/domain/entity/product_entity.dart
+#	new file:   lib/feature/product/domain/repository/product_repository.dart
+#	new file:   lib/feature/product/domain/usecase/get_all_product_usecase.dart
+#	new file:   lib/feature/product/presentation/view_model/product_event.dart
+#	new file:   lib/feature/product/presentation/view_model/product_state.dart
+#	new file:   lib/feature/product/presentation/view_model/product_view_model.dart
+#	new file:   lib/state/bottom_navigation_cubit.dart
+#	new file:   lib/state/bottom_navigation_state.dart
+#	new file:   lib/state/dashboard_screen.dart
+#	new file:   lib/view/auth/dashboard/history_screen.dart
+#	new file:   lib/view/auth/dashboard/order_screen.dart
+#	new file:   lib/view/auth/dashboard/shop_list_screen.dart
+#

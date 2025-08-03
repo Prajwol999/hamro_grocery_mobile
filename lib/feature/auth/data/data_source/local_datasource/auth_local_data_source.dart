@@ -6,8 +6,8 @@ import 'package:hamro_grocery_mobile/feature/auth/domain/entity/auth_entity.dart
 class UserLocalDataSource implements IAuthDataSource {
   final HiveService _hiveService;
 
-  UserLocalDataSource({required HiveService hiveService})
-    : _hiveService = hiveService;
+  // CONSTRUCTOR CORRECTED HERE
+  UserLocalDataSource(this._hiveService);
 
   @override
   Future<String> loginUser(String email, String password) async {
@@ -31,5 +31,35 @@ class UserLocalDataSource implements IAuthDataSource {
     } catch (e) {
       throw Exception("Registration Failed : $e");
     }
+  }
+
+  @override
+  Future<void> changePassword(String oldPassword, String newPassword) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthEntity> getUserProfile(String? token) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> logoutUser() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> resetPassword(String email) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthEntity> updateProfilePicture(String imagePath, String? token) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateUserProfile(AuthEntity entity, String? token) {
+    throw UnimplementedError();
   }
 }

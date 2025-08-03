@@ -1,59 +1,75 @@
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
+  // In your user_api_model.dart file
 
-import '../../domain/entity/auth_entity.dart';
+  import 'package:equatable/equatable.dart';
+  import 'package:json_annotation/json_annotation.dart';
+  import '../../domain/entity/auth_entity.dart';
 
+  part 'user_api_model.g.dart';
 
+  @JsonSerializable()
+  class UserApiModel extends Equatable {
+    @JsonKey(name: '_id', includeIfNull: false)
+    final String? id;
 
-part 'user_api_model.g.dart';
+    @JsonKey(name: 'fullName')
+    final String fullName;
 
-@JsonSerializable()
-class UserApiModel extends Equatable {
-  
-  @JsonKey(name: '_id', includeIfNull: false)
-  final String? id;
+    final String email;
+    final String? password;
+    @JsonKey(includeIfNull: true)
+    final String? profilePicture;
+    final String? location;
+    @JsonKey(name: 'groceryPoints')
+    final int? grocerypoints;
 
-  @JsonKey(name: 'fullName')
-  final String fullName;
+    const UserApiModel({
+      this.id,
+      required this.fullName,
+      required this.email,
+      this.password,
+      this.profilePicture,
+      this.location,
+      this.grocerypoints,
+    });
 
-  final String email;
-  final String? password;
+    factory UserApiModel.fromJson(Map<String, dynamic> json) =>
+        _$UserApiModelFromJson(json);
 
-  const UserApiModel({
-    this.id,
-    required this.fullName,
-    required this.email,
-    
-    this.password,
-  });
+    Map<String, dynamic> toJson() => _$UserApiModelToJson(this);
 
-  factory UserApiModel.fromJson(Map<String, dynamic> json) =>
-      _$UserApiModelFromJson(json);
+    // This toEntity() method is now correct because 'grocerypoints' will be populated.
+    AuthEntity toEntity() {
+      return AuthEntity(
+        userId: id,
+        fullName: fullName,
+        email: email,
+        password: password ?? '', // It's good practice to provide a default
+        profilePicture: profilePicture,
+        location: location,
+        grocerypoints: grocerypoints,
+      );
+    }
 
-  Map<String, dynamic> toJson() => _$UserApiModelToJson(this);
+    factory UserApiModel.fromEntity(AuthEntity entity) {
+      return UserApiModel(
+        id: entity.userId,
+        fullName: entity.fullName,
+        email: entity.email,
+        password: entity.password,
+        profilePicture: entity.profilePicture,
+        location: entity.location,
+        grocerypoints: entity.grocerypoints,
+      );
+    }
 
-  
-  AuthEntity toEntity() {
-    return AuthEntity(
-      userId: id,
-      fullName: fullName,
-      email: email,
-      password: password ?? '',
-    );
+    @override
+    List<Object?> get props => [
+      id,
+      fullName,
+      password,
+      email,
+      profilePicture,
+      location,
+      grocerypoints,
+    ];
   }
-
-  
-  factory UserApiModel.fromEntity(AuthEntity entity) {
-    return UserApiModel(
-      
-      id: entity.userId,
-      fullName: entity.fullName,
-      email: entity.email,
-      password: entity.password,
-    );
-  }
-
-  @override
-  
-  List<Object?> get props => [id, fullName, password, email];
-}
