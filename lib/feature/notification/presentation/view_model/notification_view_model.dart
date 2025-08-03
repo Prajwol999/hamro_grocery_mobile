@@ -46,11 +46,10 @@ class NotificationViewModel extends Bloc<NotificationEvent, NotificationState> {
     result.fold(
       (failure) {
         print('Failed to mark notifications as read: ${failure.message}');
-        // If marking fails, we still fetch the notifications
-        add(GetNotificationsEvent());
+        
       },
       (success) {
-        // If successful, refetch the notifications to update the UI
+        
         add(GetNotificationsEvent());
       },
     );

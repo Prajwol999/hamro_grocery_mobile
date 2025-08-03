@@ -13,18 +13,18 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      // FINAL FIX: Dispatch MarkAsReadEvent when the screen opens
+      
       create:
           (context) =>
               serviceLocator<NotificationViewModel>()..add(MarkAsReadEvent()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Notifications'),
-          // The manual button is no longer needed
+          
         ),
         body: BlocBuilder<NotificationViewModel, NotificationState>(
           builder: (context, state) {
-            // We can show a loading indicator even while marking as read
+            
             if (state.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -39,7 +39,7 @@ class NotificationScreen extends StatelessWidget {
 
             return RefreshIndicator(
               onRefresh: () async {
-                // The user can still pull to refresh
+                
                 context.read<NotificationViewModel>().add(
                   GetNotificationsEvent(),
                 );
@@ -48,19 +48,19 @@ class NotificationScreen extends StatelessWidget {
                 itemCount: state.notifications.length,
                 itemBuilder: (context, index) {
                   final notification = state.notifications[index];
-                  // Since the list is refreshed after marking, all should be 'read'
+                  
                   final isRead = notification.read;
                   final timeAgo = _formatTimeAgo(notification.createdAt);
 
                   return Container(
-                    // You can remove the color change if you prefer
+                    
                     color:
                         isRead
                             ? Colors.transparent
                             : Colors.blue.withOpacity(0.05),
                     child: ListTile(
                       leading: Icon(
-                        Icons.notifications_none, // Always show the 'read' icon
+                        Icons.notifications_none, 
                         color: Colors.grey,
                       ),
                       title: Text(notification.message),
