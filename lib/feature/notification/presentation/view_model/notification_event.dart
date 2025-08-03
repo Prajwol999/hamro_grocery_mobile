@@ -1,5 +1,5 @@
-// abstract class NotificationEvent {}
+abstract class NotificationEvent {}
 
-// class GetNotificationsEvent extends NotificationEvent {}
+class GetNotificationsEvent extends NotificationEvent {}
 
-// class MarkAsReadEvent extends NotificationEvent {}
+class MarkAsReadEvent extends NotificationEvent {}
