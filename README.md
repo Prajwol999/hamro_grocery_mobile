@@ -1,16 +1,7 @@
-# hamro_grocery_mobile
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Hamro Grocery is a mobile application designed to make grocery shopping easier and more
+convenient for people . Users can browse various products, add items to their cart, place orders,
+and get groceries delivered directly to their homes. The app includes essential features such as
+secure sign-in, order history,chatbot assistant and real time notifications. It also offers a loyalty
+point system to reward frequent users. With a focus on simplicity and reliability, Hamro Grocery
+aims to provide a smooth and efficient shopping experience tailored to the needs of modern
+households.
